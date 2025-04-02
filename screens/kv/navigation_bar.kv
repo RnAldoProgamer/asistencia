@@ -1,0 +1,79 @@
+#:kivy 2.3.1
+
+<NavigationBar@BoxLayout>:
+    orientation: 'horizontal'
+    size_hint: 1, 0.1
+    padding: '5dp'
+    spacing: '5dp'
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    NavButton:
+        id: scan_button
+        icon_source: 'assets/qr_icon.png'
+        button_text: 'Escanear'
+        active: app.go_to_home == 'home'
+        on_release: app.go_to_home(self)
+
+    NavButton:
+        id: user_button
+        icon_source: 'assets/user_icon.png'
+        button_text: 'Usuario'
+        active: root.parent.parent.go_to_student == 'student'
+        on_release: root.parent.parent.go_to_student(self)
+
+    NavButton:
+        id: report_button
+        icon_source: 'assets/docs_icon.png'
+        button_text: 'Reporte'
+        active: root.parent.parent.go_to_report == 'report'
+        on_release: root.parent.parent.go_to_report(self)
+
+    NavButton:
+        id: settings_button
+        icon_source: 'assets/settings_icon.png'
+        button_text: 'Ajustes'
+        active: root.parent.parent.go_to_settings == 'settings'
+        on_release: root.parent.parent.go_to_settings(self)
+
+<NavButton@ButtonBehavior+BoxLayout>:
+    orientation: 'vertical'
+    padding: '2dp'
+    spacing: '2dp'
+    icon_source: ''
+    button_text: ''
+    active: False
+    size_hint: 0.2, 0.3
+    
+    canvas.before:
+        Color:
+            rgba: (0.1, 0.6, 0.8, 1) if self.active else (0.95, 0.95, 0.95, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    RelativeLayout:
+        size_hint: 1, 0.7
+        
+        Image:
+            source: root.icon_source
+            size_hint: None, None
+            size: min(self.parent.width, self.parent.height) * 0.6, min(self.parent.width, self.parent.height) * 0.6
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            color: (1, 1, 1, 1) if root.active else (0.7, 0.7, 0.7, 1)
+            
+    Label:
+        text: root.button_text
+        size_hint: 1, 0.3
+        color: (1, 1, 1, 1) if root.active else (0.5, 0.5, 0.5, 1)
+        font_size: '14sp'
+        bold: True if root.active else False
+
+    def update_active_buttons(self, current_screen):
+        for child in self.children:
+            if hasattr(child, 'screen_name'):
+                child.active = (child.screen_name == current_screen)

@@ -1,0 +1,11 @@
+#:kivy 2.3.1
+#:import HomeScreen screens.home_screen.HomeScreen
+#:import StudentScreen screens.student_screen.StudentScreen
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+
+ScreenManager:
+    transition: SlideTransition(duration=0.3)
+    HomeScreen:
+        name: 'home'
+    StudentScreen:
+        name: 'student'
